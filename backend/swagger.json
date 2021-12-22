@@ -1,0 +1,35 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {},
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header"
+      }
+    }
+  },
+  "info": {
+    "title": "backend",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT"
+    },
+    "contact": {
+      "name": "Leonardo H. K. Tsuji ",
+      "email": "leonardo_tsuji@hotmail.com"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {},
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}

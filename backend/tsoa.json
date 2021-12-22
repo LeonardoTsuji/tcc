@@ -1,0 +1,20 @@
+{
+  "entryFile": "src/shared/infra/http/server.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [],
+  "spec": {
+    "outputDirectory": ".",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "."
+  },
+  "ignore": ["**/node_modules/**"]
+}
