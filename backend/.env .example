@@ -1,0 +1,17 @@
+DEBUG=backend*
+NODE_ENV=development
+PORT=3333
+DB_TYPE=mysql
+DB_USER=user
+DB_PASSWORD=password
+DB_NAME=database
+DB_HOST=127.0.0.1
+JWT_TOKEN=token
+JWT_REFRESH_TOKEN=refresh_token
+CRYPT_SALT_OR_ROUNDS=1
+CRYPT_DRIVER=bcrypt
+FACEBOOK_ID=1
+FACEBOOK_SECRET=1
+FACEBOOK_REDIRECT_URI=http://localhost:3000/auth/facebook/
+SENDGRID_USER=user
+SENDGRID_PASSWORD=password

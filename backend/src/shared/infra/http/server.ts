@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import '@shared/container';
 import http from 'http';
 
 import Debug from 'debug';
@@ -14,7 +15,6 @@ import AppError from '@shared/errors/AppError';
 import swaggerUi from 'swagger-ui-express';
 import routes from './routes';
 import '@shared/infra/typeorm';
-import '@shared/container';
 import swaggerFile from '../../../../swagger.json';
 
 const log = Debug('api:main');
@@ -32,6 +32,7 @@ app.use(errors());
 
 app.use(
   (error: Error, request: Request, response: Response, _: NextFunction) => {
+    console.log(error, 'error');
     if (error instanceof AppError) {
       return response.status(error.statusCode).json({
         status: 'error',

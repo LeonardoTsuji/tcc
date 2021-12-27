@@ -7,7 +7,7 @@ export default (fn: any) => {
     request: Request,
     response: Response,
   ): Promise<Response | undefined> {
-    const result = await fn(request.body, request.user.frotista_id);
+    const result = await fn(request.body, request.userId);
     if (response) {
       return response.json(result);
     }

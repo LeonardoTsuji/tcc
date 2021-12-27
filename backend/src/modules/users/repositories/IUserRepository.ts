@@ -1,7 +1,7 @@
 import { DeepPartial } from 'typeorm';
 import ICreateUser from '../dtos/ICreateUser';
 import IFindAllUser from '../dtos/IFindAllUser';
-import User from '../infra/typeorm/entitites/User';
+import User from '../infra/typeorm/entities/User';
 
 export default interface IUserRepository {
   save(user: ICreateUser): Promise<User>;

@@ -3,7 +3,9 @@ import ILogProvider from '@shared/container/providers/LogProvider/models/ILogPro
 import AppError from '@shared/errors/AppError';
 import IUserRepository from '../repositories/IUserRepository';
 import ICreateUser from '../dtos/ICreateUser';
-import User from '../infra/typeorm/entitites/User';
+import User from '../infra/typeorm/entities/User';
+import ICryptProvider from '@shared/container/providers/CryptProvider/models/ICryptProvider';
+import IJwtProvider from '@shared/container/providers/JwtProvider/models/IJwtProvider';
 
 @injectable()
 export default class CreateUserService {
@@ -12,6 +14,10 @@ export default class CreateUserService {
     private userRepository: IUserRepository,
     @inject('LogProvider')
     private log: ILogProvider,
+    @inject('CryptProvider')
+    private crypt: ICryptProvider,
+    @inject('JwtProvider')
+    private jwt: IJwtProvider,
   ) {}
 
   public async execute({
@@ -19,32 +25,61 @@ export default class CreateUserService {
     password,
     name,
     phone,
-    roleId,
+    role_id,
     active,
   }: ICreateUser): Promise<User | undefined> {
     try {
-      if (!email || !password || !name || !phone || !roleId) {
+      if (!email || !password || !name || !phone || !role_id) {
         throw new AppError(
-          'Dados incompletos para a criação de um novo usuário, por favor validar e tentar novamente.',
+          'Incomplete data for creating a new user, please validate and try again.',
         );
       }
 
+      this.log.INFO({
+        message: 'Init execute',
+        params: {
+          email,
+          password,
+          name,
+          phone,
+          role_id,
+          active,
+        },
+      });
       const hasUser = await this.userRepository.findOne({ email });
 
+      this.log.INFO({
+        message: 'userRepository.findOne',
+        result: {
+          user: JSON.stringify(hasUser),
+        },
+      });
+
       if (hasUser) {
-        throw new AppError('Usuário já cadastrado');
+        throw new AppError('User already exists');
       }
 
-      const user: User = await this.userRepository.save({
+      const hash = this.crypt.encrypt({
+        data: password,
+      });
+
+      const newUser: User = await this.userRepository.save({
         email,
-        password,
+        password: hash,
         name,
         phone,
-        roleId,
+        role_id: role_id,
         active,
       });
 
-      return user;
+      this.log.INFO({
+        message: 'userRepository.save',
+        result: {
+          user: JSON.stringify(newUser),
+        },
+      });
+
+      return newUser;
     } catch (error: any) {
       this.log.ERROR(error);
       throw new AppError(error.message);

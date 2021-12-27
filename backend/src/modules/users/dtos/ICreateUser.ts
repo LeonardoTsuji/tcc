@@ -3,6 +3,6 @@ export default interface ICreateUser {
   password: string;
   name: string;
   phone: string;
-  roleId: number;
+  role_id: number;
   active: boolean;
 }

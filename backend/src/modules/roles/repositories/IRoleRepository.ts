@@ -1,5 +1,5 @@
 import { DeepPartial } from 'typeorm';
-import Role from '../infra/typeorm/entitites/Role';
+import Role from '../infra/typeorm/entities/Role';
 
 export default interface IRoleRepository {
   save(usuario: Role): Promise<Role>;

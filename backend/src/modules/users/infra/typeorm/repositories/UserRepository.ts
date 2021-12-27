@@ -1,8 +1,9 @@
 import { DeepPartial, getRepository, Like, Repository } from 'typeorm';
 
 import IUserRepository from '@modules/users/repositories/IUserRepository';
-import User from '../entitites/User';
+import User from '../entities/User';
 import IFindAllUser from '@modules/users/dtos/IFindAllUser';
+import ICreateUser from '@modules/users/dtos/ICreateUser';
 
 export default class UserRepository implements IUserRepository {
   private ormRepository: Repository<User>;
@@ -11,7 +12,7 @@ export default class UserRepository implements IUserRepository {
     this.ormRepository = getRepository(User);
   }
 
-  public async save(user: User): Promise<User> {
+  public async save(user: ICreateUser): Promise<User> {
     return this.ormRepository.save(user);
   }
 
@@ -31,14 +32,22 @@ export default class UserRepository implements IUserRepository {
   }
 
   public async findAll(data: IFindAllUser): Promise<User[]> {
-    const role = data.role || '';
+    const role = data.role;
 
-    return this.ormRepository.find({
-      active: true,
-      role: {
-        name: Like(`%${role}%`),
-      },
-    });
+    const usersQuery = this.ormRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.role', 'role')
+      .where('user.active = :active', {
+        active: true,
+      });
+
+    if (role) {
+      usersQuery.andWhere('role.id = :role', {
+        role,
+      });
+    }
+
+    return usersQuery.getMany();
   }
 
   public async findById(id: number): Promise<User | undefined> {

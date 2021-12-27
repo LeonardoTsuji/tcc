@@ -11,7 +11,7 @@ export default (fn: IParams) => {
     response: Response,
   ): Promise<Response | undefined> {
     const { id } = request.params;
-    const result = await fn(Number(id), request.body, request.user.frotista_id);
+    const result = await fn(Number(id), request.body, request.userId);
     if (response) {
       return response.json(result);
     }

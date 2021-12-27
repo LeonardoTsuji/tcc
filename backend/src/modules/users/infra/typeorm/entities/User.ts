@@ -1,4 +1,4 @@
-import Role from '@modules/roles/infra/typeorm/entitites/Role';
+import Role from '@modules/roles/infra/typeorm/entities/Role';
 import {
   Column,
   CreateDateColumn,

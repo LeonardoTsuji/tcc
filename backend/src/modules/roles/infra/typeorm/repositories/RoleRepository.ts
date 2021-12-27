@@ -1,6 +1,6 @@
 import IRoleRepository from '@modules/roles/repositories/IRoleRepository';
 import { DeepPartial, getRepository, Like, Repository } from 'typeorm';
-import Role from '../entitites/Role';
+import Role from '../entities/Role';
 
 export default class RoleRepository implements IRoleRepository {
   private ormRepository: Repository<Role>;
