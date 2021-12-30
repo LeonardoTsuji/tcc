@@ -1,0 +1,3 @@
+interface IFindAllBrand {
+  name?: string;
+}

@@ -1,0 +1,3 @@
+interface IForgotPasswordRequest {
+  email: string;
+}

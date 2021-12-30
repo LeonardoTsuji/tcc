@@ -1,6 +1,9 @@
+import MiddlewareDeleteRequest from '@shared/infra/http/middlewares/MiddlewareDeleteRequest';
+import MiddlewarePatchRequest from '@shared/infra/http/middlewares/MiddlewarePatchRequest';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
+import MiddlewareFindUserById from '../middlewares/MiddlewareFindUserById';
 import MiddlewareFindUsers from '../middlewares/MiddlewareFindUsers';
 
 const userRouter = Router();
@@ -27,6 +30,45 @@ userRouter.get(
     },
   }),
   MiddlewareFindUsers(userController.show),
+);
+userRouter.get(
+  '/:id',
+  celebrate({
+    [Segments.QUERY]: {
+      email: Joi.string().allow('', null),
+    },
+  }),
+  MiddlewareFindUserById(userController.index),
+);
+userRouter.put(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().required(),
+    },
+    [Segments.BODY]: {
+      email: Joi.string().allow('', null),
+      password: Joi.string().allow('', null),
+      name: Joi.string().allow('', null),
+      phone: Joi.string().allow('', null),
+      roleId: Joi.number().required(),
+      id: Joi.number().allow('', null),
+      active: Joi.boolean().allow('', null),
+    },
+  }),
+  MiddlewarePatchRequest(userController.update),
+);
+userRouter.delete(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().required(),
+    },
+    [Segments.BODY]: {
+      email: Joi.string().allow('', null),
+    },
+  }),
+  MiddlewareDeleteRequest(userController.delete),
 );
 
 export default userRouter;

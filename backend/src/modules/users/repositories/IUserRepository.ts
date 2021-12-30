@@ -10,5 +10,5 @@ export default interface IUserRepository {
   findById(id: number): Promise<User | undefined>;
   findAll(data: IFindAllUser): Promise<User[]>;
   findOne(data: IFindAllUser): Promise<User | undefined>;
-  delete(id: number): Promise<void>;
+  delete(id: number): Promise<User>;
 }

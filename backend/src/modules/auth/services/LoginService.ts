@@ -33,6 +33,13 @@ export default class LoginService {
         );
       }
 
+      this.log.INFO({
+        message: 'Init LoginService execute',
+        params: {
+          email,
+        },
+      });
+
       const user = await this.userRepository.findOne({ email });
 
       if (!user) throw new AppError('User not found');

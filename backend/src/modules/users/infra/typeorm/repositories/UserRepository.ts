@@ -61,11 +61,11 @@ export default class UserRepository implements IUserRepository {
       throw new Error('User not found');
     }
 
-    const usuarioToSave = this.ormRepository.merge(user, partial);
-    return this.ormRepository.save(usuarioToSave);
+    const userToSave = this.ormRepository.merge(user, partial);
+    return this.ormRepository.save(userToSave);
   }
 
-  public async delete(id: number): Promise<void> {
+  public async delete(id: number): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
       throw new Error('User not found');
@@ -73,6 +73,6 @@ export default class UserRepository implements IUserRepository {
 
     user.active = false;
 
-    await this.ormRepository.update(user.id, user);
+    return this.ormRepository.softRemove(user);
   }
 }

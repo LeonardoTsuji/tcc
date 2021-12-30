@@ -9,7 +9,7 @@ export default (fn: any) => {
   ): Promise<Response | undefined> {
     const result = await fn(request.body, request.userId);
     if (response) {
-      return response.json(result);
+      return response.json(result).status(201);
     }
   };
 };

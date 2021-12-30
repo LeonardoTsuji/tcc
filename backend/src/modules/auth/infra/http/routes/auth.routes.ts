@@ -2,6 +2,7 @@ import MiddlewarePostRequest from '@shared/infra/http/middlewares/MiddlewarePost
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import AuthController from '../controllers/AuthController';
+import MiddlewareUpdatePassword from '../middlewares/MiddlewareUpdatePassword';
 
 const authRouter = Router();
 const authController = new AuthController();
@@ -17,6 +18,26 @@ authRouter.post(
     },
   }),
   MiddlewarePostRequest(authController.login),
+);
+
+authRouter.put(
+  '/update-password',
+  celebrate({
+    [Segments.BODY]: {
+      password: Joi.string().required(),
+    },
+  }),
+  MiddlewareUpdatePassword(authController.update),
+);
+
+authRouter.put(
+  '/forgot-password',
+  celebrate({
+    [Segments.BODY]: {
+      email: Joi.string().required(),
+    },
+  }),
+  MiddlewarePostRequest(authController.forgot),
 );
 
 export default authRouter;

@@ -2,6 +2,7 @@ import Role from '@modules/roles/infra/typeorm/entities/Role';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -41,6 +42,9 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 }
 
 export default User;

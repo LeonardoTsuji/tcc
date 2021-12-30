@@ -1,0 +1,3 @@
+interface ICreateBrand {
+  name: string;
+}

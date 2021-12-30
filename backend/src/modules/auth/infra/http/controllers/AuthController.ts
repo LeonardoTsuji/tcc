@@ -1,7 +1,10 @@
 import ILoginRequest from '@modules/auth/dtos/ILoginRequest';
 import ILoginResponse from '@modules/auth/dtos/ILoginResponse';
+import ForgotPasswordService from '@modules/auth/services/ForgotPasswordService';
 import LoginService from '@modules/auth/services/LoginService';
-import { Body, Post, SuccessResponse } from 'tsoa';
+import UpdatePasswordService from '@modules/auth/services/UpdatePasswordService';
+import User from '@modules/users/infra/typeorm/entities/User';
+import { Body, Inject, Post, Put, SuccessResponse } from 'tsoa';
 import { container } from 'tsyringe';
 
 export default class AuthController {
@@ -20,5 +23,33 @@ export default class AuthController {
     });
 
     return login;
+  }
+  @Put('/update-password')
+  @SuccessResponse('200', 'OK')
+  public async update(
+    @Body() { password }: IUpdatePasswordRequest,
+    @Inject() id: number,
+  ): Promise<User | undefined> {
+    const updatePasswordService = container.resolve(UpdatePasswordService);
+
+    const updated = await updatePasswordService.execute({
+      password,
+      id,
+    });
+
+    return updated;
+  }
+  @Put('/forgot-password')
+  @SuccessResponse('200', 'OK')
+  public async forgot(
+    @Body() { email }: IForgotPasswordRequest,
+  ): Promise<User | undefined> {
+    const forgotPasswordService = container.resolve(ForgotPasswordService);
+
+    const updated = await forgotPasswordService.execute({
+      email,
+    });
+
+    return updated;
   }
 }

@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 
 interface IParams {
-  (id: number, frotista_id: number): Promise<any>;
+  (id: number, body: any, userId: number): Promise<any>;
 }
 export default (fn: IParams) => {
   return async function MiddlewareDeleteRequest(
@@ -11,7 +11,8 @@ export default (fn: IParams) => {
     response: Response,
   ): Promise<Response | undefined> {
     const { id } = request.params;
-    const result = await fn(Number(id), request.userId);
+
+    const result = await fn(Number(id), request.body, request.userId);
     if (response) {
       return response.json(result);
     }

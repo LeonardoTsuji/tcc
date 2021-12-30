@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 
 interface IParams {
-  (id: number, data: any, frotista_id: number): Promise<any>;
+  (id: number, data: any, userId: number): Promise<any>;
 }
 export default (fn: IParams) => {
   return async function MiddlewarePatchRequest(
