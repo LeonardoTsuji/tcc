@@ -8,22 +8,22 @@ import IBrandRepository from '../repositories/IBrandRepository';
 export default class UpdateBrandService {
   constructor(
     @inject('BrandRepository')
-    private modelRepository: IBrandRepository,
+    private brandRepository: IBrandRepository,
     @inject('LogProvider')
     private log: ILogProvider,
   ) {}
 
   public async execute({ name, id }: IUpdateBrand): Promise<Brand | undefined> {
     try {
-      const modelFound = await this.modelRepository.findById(id);
+      const brandFound = await this.brandRepository.findById(id);
 
-      if (!modelFound) throw new AppError('Brand not found!', 404);
+      if (!brandFound) throw new AppError('Brand not found!', 404);
 
-      const modelUpdated = await this.modelRepository.update(modelFound.id, {
+      const brandUpdated = await this.brandRepository.update(brandFound.id, {
         name,
       });
 
-      return modelUpdated;
+      return brandUpdated;
     } catch (error: any) {
       this.log.ERROR(error);
       throw new AppError(error.message);

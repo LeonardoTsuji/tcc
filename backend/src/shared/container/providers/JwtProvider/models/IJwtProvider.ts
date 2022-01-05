@@ -14,7 +14,6 @@ export interface IDecrypt {
 export default interface IJwtProvider {
   generate(payload: any): string;
   generateRefresh(payload: any): string;
-  verify(req: Request, res: Response, next: NextFunction): any;
   verifyRefresh(token: string): string | JwtPayload;
   getTokenFromHeaders(headers: AxiosRequestHeaders): string | undefined;
 }

@@ -1,0 +1,3 @@
+interface IFindAllBudget {
+  name?: string;
+}

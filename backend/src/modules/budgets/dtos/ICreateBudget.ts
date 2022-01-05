@@ -1,0 +1,3 @@
+interface ICreateBudget {
+  name: string;
+}

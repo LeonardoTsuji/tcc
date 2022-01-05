@@ -17,7 +17,7 @@ export default class CreateBrandService {
     try {
       if (!name) {
         throw new AppError(
-          'Incomplete data for creating a new model, please validate and try again.',
+          'Incomplete data for creating a new brand, please validate and try again.',
         );
       }
 

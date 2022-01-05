@@ -23,28 +23,6 @@ export default class JsonWebTokenProvider implements IJwtProvider {
   generateRefresh(payload: any): string {
     return jwt.sign(payload, refreshTokenPrivateKey, refreshOptions);
   }
-  verify(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>,
-    next: NextFunction,
-  ) {
-    const token = req.headers['authorization'];
-    if (!token)
-      return res
-        .status(401)
-        .json({ auth: false, message: 'Any token was provided' });
-
-    const bearer = token.split(' ');
-    const bearerToken = bearer[1];
-
-    jwt.verify(bearerToken, jwtConfig.token, function (err, decoded) {
-      if (err)
-        return res.status(401).json({ auth: false, message: 'Invalid token!' });
-
-      req.userId = decoded!.id;
-      next();
-    });
-  }
   verifyRefresh(token: string): string | JwtPayload {
     return jwt.verify(token, refreshTokenPrivateKey);
   }

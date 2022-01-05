@@ -1,0 +1,3 @@
+interface IFindAllCategory {
+  name?: string;
+}

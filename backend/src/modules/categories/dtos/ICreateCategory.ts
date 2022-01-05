@@ -1,0 +1,3 @@
+interface ICreateCategory {
+  name: string;
+}
