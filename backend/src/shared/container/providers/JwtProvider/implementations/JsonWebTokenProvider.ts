@@ -1,10 +1,7 @@
-import { AxiosRequestHeaders } from 'axios';
-import { Request, Response, NextFunction } from 'express';
-import { ParamsDictionary } from 'express-serve-static-core';
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
-import { ParsedQs } from 'qs';
-import IJwtProvider from '../models/IJwtProvider';
 import jwtConfig from '@config/jwt';
+import { AxiosRequestHeaders } from 'axios';
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
+import IJwtProvider from '../models/IJwtProvider';
 
 const tokenPrivateKey = jwtConfig.token;
 const refreshTokenPrivateKey = jwtConfig.refreshToken;

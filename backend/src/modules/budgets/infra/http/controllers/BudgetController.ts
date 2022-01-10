@@ -7,6 +7,7 @@ import {
   Body,
   Delete,
   Get,
+  Inject,
   Path,
   Post,
   Put,
@@ -21,12 +22,27 @@ export default class BudgetController {
   @Post('/')
   @SuccessResponse('201', 'CREATED')
   public async create(
-    @Body() { name }: ICreateBudget,
+    @Body()
+    {
+      expiration_date,
+      payment_method,
+      status,
+      products,
+      vehicle_id,
+      schedule_id,
+    }: ICreateBudgetProducts,
+    @Inject() userId: number,
   ): Promise<Budget | undefined> {
     const createBudget = container.resolve(CreateBudgetService);
 
     const budgetCreated = await createBudget.execute({
-      name,
+      expiration_date,
+      payment_method,
+      status,
+      products,
+      vehicle_id,
+      schedule_id,
+      user_id: userId,
     });
 
     return budgetCreated;
@@ -35,11 +51,15 @@ export default class BudgetController {
   @Security('api_key', ['project:read'])
   @Get('/')
   @SuccessResponse('200', 'OK')
-  public async show(@Query() name?: string): Promise<Budget[] | undefined> {
+  public async show(
+    @Query() status?: string,
+    @Query() userId?: number,
+  ): Promise<Budget[] | undefined> {
     const listBudgets = container.resolve(ListBudgetsService);
 
     const budgets = await listBudgets.execute({
-      name,
+      status,
+      user_id: userId,
     });
 
     return budgets;
@@ -48,10 +68,13 @@ export default class BudgetController {
   @Security('api_key', ['project:read'])
   @Get('/:id')
   @SuccessResponse('200', 'OK')
-  public async index(@Path() id: number): Promise<Budget | undefined> {
+  public async index(
+    @Path() id: number,
+    @Query() user_id: number,
+  ): Promise<Budget | undefined> {
     const findBudget = container.resolve(FindBudgetByIdService);
 
-    const budget = await findBudget.execute(id);
+    const budget = await findBudget.execute({ id, user_id });
 
     return budget;
   }
@@ -61,14 +84,11 @@ export default class BudgetController {
   @SuccessResponse('200', 'OK')
   public async update(
     @Path() id: number,
-    @Body() { name }: IUpdateBudget,
+    @Body() data: IUpdateBudget,
   ): Promise<Budget | undefined> {
     const budgetUpdate = container.resolve(UpdateBudgetService);
 
-    const budgetUpdated = await budgetUpdate.execute({
-      name,
-      id,
-    });
+    const budgetUpdated = await budgetUpdate.execute({ ...data, id });
 
     return budgetUpdated;
   }
@@ -76,10 +96,13 @@ export default class BudgetController {
   @Security('api_key', ['project:read'])
   @Delete('/:id')
   @SuccessResponse('200', 'OK')
-  public async delete(@Path() id: number): Promise<Budget | undefined> {
+  public async delete(
+    @Path() id: number,
+    @Inject() user_id: number,
+  ): Promise<Budget | undefined> {
     const budgetDelete = container.resolve(DeleteBudgetService);
 
-    const budgetDeleted = await budgetDelete.execute(id);
+    const budgetDeleted = await budgetDelete.execute({ id, user_id });
 
     return budgetDeleted;
   }

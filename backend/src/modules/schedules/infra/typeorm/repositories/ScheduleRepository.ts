@@ -45,13 +45,13 @@ export default class ScheduleRepository implements IScheduleRepository {
   }
 
   public async findAll(data: IFindAllSchedule): Promise<Schedule[]> {
-    const name = data.name || undefined;
+    const status = data.status || undefined;
 
     const scheduleQuery = this.ormRepository.createQueryBuilder('schedule');
 
-    if (name) {
-      scheduleQuery.where('schedule.name = :name', {
-        name,
+    if (status) {
+      scheduleQuery.where('schedule.status = :status', {
+        status,
       });
     }
 

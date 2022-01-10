@@ -1,10 +1,13 @@
 import Brand from '@modules/brands/infra/typeorm/entities/Brand';
+import Budget from '@modules/budgets/infra/typeorm/entities/Budget';
 import Category from '@modules/categories/infra/typeorm/entities/Category';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,6 +40,11 @@ class Product {
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @ManyToMany(() => Budget, budget => budget.products, {
+    cascade: true,
+  })
+  budgets: Budget[];
 
   @CreateDateColumn()
   created_at: Date;

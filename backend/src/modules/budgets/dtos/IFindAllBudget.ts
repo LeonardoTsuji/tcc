@@ -1,3 +1,4 @@
 interface IFindAllBudget {
-  name?: string;
+  status?: string;
+  user_id?: number;
 }

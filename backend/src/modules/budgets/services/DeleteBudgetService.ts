@@ -13,13 +13,13 @@ export default class DeleteBudgetService {
     private log: ILogProvider,
   ) {}
 
-  public async execute(id: number): Promise<Budget | undefined> {
+  public async execute(data: IFindByIdBudget): Promise<Budget | undefined> {
     try {
-      const budgetFound = await this.budgetRepository.findById(id);
+      const budgetFound = await this.budgetRepository.findById(data);
 
       if (!budgetFound) throw new AppError('Budget not found!', 404);
 
-      const budgetDeleted = await this.budgetRepository.delete(budgetFound.id);
+      const budgetDeleted = await this.budgetRepository.delete(budgetFound);
 
       return budgetDeleted;
     } catch (error: any) {

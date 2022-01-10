@@ -28,7 +28,9 @@ export default class CreateScheduleService {
       this.log.INFO({
         message: 'Init execute',
         params: {
-          name,
+          date_schedule,
+          vehicle_id,
+          user_id,
         },
       });
 

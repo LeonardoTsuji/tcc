@@ -1,3 +1,4 @@
+import verify from '@modules/auth/infra/http/middlewares/verifyToken';
 import MiddlewareDeleteRequest from '@shared/infra/http/middlewares/MiddlewareDeleteRequest';
 import MiddlewarePatchRequest from '@shared/infra/http/middlewares/MiddlewarePatchRequest';
 import MiddlewarePostRequest from '@shared/infra/http/middlewares/MiddlewarePostRequest';
@@ -13,16 +14,18 @@ scheduleRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      date_schedule: Joi.date().required(),
+      vehicle_id: Joi.number().required(),
     },
   }),
+  verify,
   MiddlewarePostRequest(scheduleController.create),
 );
 scheduleRouter.get(
   '/',
   celebrate({
     [Segments.QUERY]: {
-      name: Joi.string().allow('', null),
+      status: Joi.string().allow('', null),
     },
   }),
   MiddlewareFindSchedules(scheduleController.show),
@@ -43,7 +46,7 @@ scheduleRouter.put(
       id: Joi.string().required(),
     },
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      status: Joi.string().required(),
     },
   }),
   MiddlewarePatchRequest(scheduleController.update),

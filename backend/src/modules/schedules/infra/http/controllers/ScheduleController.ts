@@ -39,11 +39,11 @@ export default class ScheduleController {
   @Security('api_key', ['project:read'])
   @Get('/')
   @SuccessResponse('200', 'OK')
-  public async show(@Query() name?: string): Promise<Schedule[] | undefined> {
+  public async show(@Query() status?: string): Promise<Schedule[] | undefined> {
     const listSchedules = container.resolve(ListSchedulesService);
 
     const schedules = await listSchedules.execute({
-      name,
+      status,
     });
 
     return schedules;
@@ -65,12 +65,12 @@ export default class ScheduleController {
   @SuccessResponse('200', 'OK')
   public async update(
     @Path() id: number,
-    @Body() { name }: IUpdateSchedule,
+    @Body() { status }: IUpdateSchedule,
   ): Promise<Schedule | undefined> {
     const scheduleUpdate = container.resolve(UpdateScheduleService);
 
     const scheduleUpdated = await scheduleUpdate.execute({
-      name,
+      status,
       id,
     });
 

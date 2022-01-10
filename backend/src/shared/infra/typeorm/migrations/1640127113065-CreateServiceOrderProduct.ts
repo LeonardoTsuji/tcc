@@ -21,11 +21,6 @@ export class CreateServiceOrderProduct1640127113065
             generationStrategy: 'increment',
           },
           {
-            name: 'quantity',
-            type: 'integer',
-            isNullable: false,
-          },
-          {
             name: 'order_service_id',
             type: 'integer',
             isNullable: false,

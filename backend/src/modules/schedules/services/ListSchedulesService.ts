@@ -14,10 +14,10 @@ export default class ListSchedulesService {
   ) {}
 
   public async execute({
-    name,
+    status,
   }: IFindAllSchedule): Promise<Schedule[] | undefined> {
     try {
-      return this.scheduleRepository.findAll({ name });
+      return this.scheduleRepository.findAll({ status });
     } catch (error: any) {
       this.log.ERROR(error);
       throw new AppError(error.message);

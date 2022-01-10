@@ -19,11 +19,6 @@ export class CreateBudgetProduct1640126275290 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'quantity',
-            type: 'integer',
-            isNullable: false,
-          },
-          {
             name: 'budget_id',
             type: 'integer',
             isNullable: false,

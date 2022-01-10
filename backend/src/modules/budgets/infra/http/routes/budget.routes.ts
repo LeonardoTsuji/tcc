@@ -1,3 +1,4 @@
+import verify from '@modules/auth/infra/http/middlewares/verifyToken';
 import MiddlewareDeleteRequest from '@shared/infra/http/middlewares/MiddlewareDeleteRequest';
 import MiddlewarePatchRequest from '@shared/infra/http/middlewares/MiddlewarePatchRequest';
 import MiddlewarePostRequest from '@shared/infra/http/middlewares/MiddlewarePostRequest';
@@ -13,18 +14,26 @@ budgetRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      expiration_date: Joi.date().required(),
+      payment_method: Joi.string().allow(null, ''),
+      status: Joi.string().allow(null, ''),
+      products: Joi.array().required(),
+      vehicle_id: Joi.number().required(),
+      schedule_id: Joi.number().required(),
     },
   }),
+  verify,
   MiddlewarePostRequest(budgetController.create),
 );
 budgetRouter.get(
   '/',
   celebrate({
     [Segments.QUERY]: {
-      name: Joi.string().allow('', null),
+      status: Joi.string().allow('', null),
+      user_id: Joi.number().allow('', null),
     },
   }),
+  verify,
   MiddlewareFindBudgets(budgetController.show),
 );
 budgetRouter.get(
@@ -34,6 +43,7 @@ budgetRouter.get(
       id: Joi.number().required(),
     },
   }),
+  verify,
   MiddlewarePatchRequest(budgetController.index),
 );
 budgetRouter.put(
@@ -43,9 +53,15 @@ budgetRouter.put(
       id: Joi.string().required(),
     },
     [Segments.BODY]: {
-      name: Joi.string().required(),
+      expiration_date: Joi.date().required(),
+      payment_method: Joi.string().allow(null, ''),
+      status: Joi.string().allow(null, ''),
+      products: Joi.array().required(),
+      vehicle_id: Joi.number().required(),
+      schedule_id: Joi.number().required(),
     },
   }),
+  verify,
   MiddlewarePatchRequest(budgetController.update),
 );
 budgetRouter.delete(
@@ -55,6 +71,7 @@ budgetRouter.delete(
       id: Joi.string().required(),
     },
   }),
+  verify,
   MiddlewareDeleteRequest(budgetController.delete),
 );
 

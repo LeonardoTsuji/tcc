@@ -14,7 +14,7 @@ export default class UpdateScheduleService {
   ) {}
 
   public async execute({
-    name,
+    status,
     id,
   }: IUpdateSchedule): Promise<Schedule | undefined> {
     try {
@@ -25,7 +25,7 @@ export default class UpdateScheduleService {
       const scheduleUpdated = await this.scheduleRepository.update(
         scheduleFound.id,
         {
-          name,
+          status,
         },
       );
 

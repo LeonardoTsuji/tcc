@@ -1,3 +1,4 @@
+import IProductRepository from '@modules/products/repositories/IProductRepository';
 import ILogProvider from '@shared/container/providers/LogProvider/models/ILogProvider';
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
@@ -9,13 +10,30 @@ export default class CreateBudgetService {
   constructor(
     @inject('BudgetRepository')
     private budgetRepository: IBudgetRepository,
+    @inject('ProductRepository')
+    private productRepository: IProductRepository,
     @inject('LogProvider')
     private log: ILogProvider,
   ) {}
 
-  public async execute({ name }: ICreateBudget): Promise<Budget | undefined> {
+  public async execute({
+    expiration_date,
+    payment_method,
+    status,
+    vehicle_id,
+    schedule_id,
+    user_id,
+    products,
+  }: ICreateBudgetProducts): Promise<Budget | undefined> {
     try {
-      if (!name) {
+      if (
+        !expiration_date ||
+        !payment_method ||
+        !status ||
+        !vehicle_id ||
+        !schedule_id ||
+        !products
+      ) {
         throw new AppError(
           'Incomplete data for creating a new budget, please validate and try again.',
         );
@@ -24,32 +42,47 @@ export default class CreateBudgetService {
       this.log.INFO({
         message: 'Init execute',
         params: {
-          name,
+          expiration_date,
+          payment_method,
+          status,
+          vehicle_id,
+          schedule_id,
+          user_id,
+          products,
         },
       });
-      const hasBudget = await this.budgetRepository.findOne(name);
 
-      this.log.INFO({
-        message: 'budgetRepository.findOne',
-        result: {
-          user: JSON.stringify(hasBudget),
-        },
-      });
-
-      if (hasBudget) {
-        throw new AppError('Budget already exists');
-      }
-
-      const newBudget: Budget = await this.budgetRepository.save({
-        name,
+      const newBudget = await this.budgetRepository.create({
+        expiration_date,
+        payment_method,
+        status,
+        vehicle_id,
+        schedule_id,
+        user_id,
       });
 
       this.log.INFO({
-        message: 'budgetRepository.save',
+        message: 'budgetRepository.create',
         result: {
           model: JSON.stringify(newBudget),
         },
       });
+
+      if (!newBudget) {
+        throw new AppError('Error on create budget!');
+      }
+
+      const productsPromises = products.map(async product => {
+        const prod = await this.productRepository.findById(product.product_id);
+
+        if (!prod) throw new AppError('Product does not exists!');
+
+        return prod;
+      });
+
+      newBudget.products = await Promise.all(productsPromises);
+
+      await this.budgetRepository.save(newBudget);
 
       return newBudget;
     } catch (error: any) {

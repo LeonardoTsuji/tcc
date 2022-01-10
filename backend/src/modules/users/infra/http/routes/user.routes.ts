@@ -1,5 +1,6 @@
 import MiddlewareDeleteRequest from '@shared/infra/http/middlewares/MiddlewareDeleteRequest';
 import MiddlewarePatchRequest from '@shared/infra/http/middlewares/MiddlewarePatchRequest';
+import MiddlewarePostRequest from '@shared/infra/http/middlewares/MiddlewarePostRequest';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import UserController from '../controllers/UserController';
@@ -17,10 +18,10 @@ userRouter.post(
       password: Joi.string().required(),
       name: Joi.string().required(),
       phone: Joi.string().required(),
-      roleId: Joi.number().required(),
+      role_id: Joi.number().required(),
     },
   }),
-  userController.create,
+  MiddlewarePostRequest(userController.create),
 );
 userRouter.get(
   '/',
@@ -51,7 +52,7 @@ userRouter.put(
       password: Joi.string().allow('', null),
       name: Joi.string().allow('', null),
       phone: Joi.string().allow('', null),
-      roleId: Joi.number().required(),
+      role_id: Joi.number().required(),
       id: Joi.number().allow('', null),
       active: Joi.boolean().allow('', null),
     },

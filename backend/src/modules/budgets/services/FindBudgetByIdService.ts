@@ -13,9 +13,9 @@ export default class FindBudgetByIdService {
     private log: ILogProvider,
   ) {}
 
-  public async execute(id: number): Promise<Budget | undefined> {
+  public async execute(data: IFindByIdVehicle): Promise<Budget | undefined> {
     try {
-      return this.budgetRepository.findById(id);
+      return this.budgetRepository.findById(data);
     } catch (error: any) {
       this.log.ERROR(error);
       throw new AppError(error.message);

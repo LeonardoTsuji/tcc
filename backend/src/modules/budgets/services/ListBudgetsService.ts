@@ -14,10 +14,11 @@ export default class ListBudgetsService {
   ) {}
 
   public async execute({
-    name,
+    status,
+    user_id,
   }: IFindAllBudget): Promise<Budget[] | undefined> {
     try {
-      return this.budgetRepository.findAll({ name });
+      return this.budgetRepository.findAll({ status, user_id });
     } catch (error: any) {
       this.log.ERROR(error);
       throw new AppError(error.message);
